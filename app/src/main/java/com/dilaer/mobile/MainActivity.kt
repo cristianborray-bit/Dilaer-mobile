@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
         ActivityResultContracts.RequestMultiplePermissions(),
     ) { result ->
         if (result[Manifest.permission.CALL_PHONE] == true) {
+            viewModel.initMonitor()
             viewModel.start()
         }
     }
@@ -58,6 +59,7 @@ class MainActivity : ComponentActivity() {
             Manifest.permission.READ_PHONE_STATE.takeIf { !granted(it) },
         )
         if (needed.isEmpty()) {
+            viewModel.initMonitor()
             viewModel.start()
         } else {
             requestPermission.launch(needed.toTypedArray())

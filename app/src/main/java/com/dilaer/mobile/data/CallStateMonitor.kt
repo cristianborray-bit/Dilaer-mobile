@@ -17,8 +17,12 @@ class CallStateMonitor(private val context: Context) {
         if (callback != null) return
         val manager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         val cb = InternalCallback(listener)
-        manager.registerTelephonyCallback(ContextCompat.getMainExecutor(context), cb)
-        callback = cb
+        try {
+            manager.registerTelephonyCallback(ContextCompat.getMainExecutor(context), cb)
+            callback = cb
+        } catch (_: SecurityException) {
+            // Permission not yet granted — will register after permissions are obtained
+        }
     }
 
     fun unregister() {

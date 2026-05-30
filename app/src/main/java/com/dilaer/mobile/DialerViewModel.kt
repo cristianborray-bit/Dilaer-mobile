@@ -39,10 +39,12 @@ class DialerViewModel(application: Application) : AndroidViewModel(application) 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val monitor = CallStateMonitor(application).also {
-        it.register { onCallEnded() }
-    }
+    private val monitor = CallStateMonitor(application)
     private var cooldownJob: Job? = null
+
+    fun initMonitor() {
+        monitor.register { onCallEnded() }
+    }
 
     fun importCsv(uri: Uri) {
         viewModelScope.launch {
